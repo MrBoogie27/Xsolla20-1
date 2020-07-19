@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PaymentSystem.Models;
 
@@ -11,11 +8,11 @@ namespace PaymentSystem.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        readonly DbHelper db;
+        private readonly DbHelper _db;
 
         public PaymentController(DbHelper db)
         {
-            this.db = db;
+            _db = db;
         }
 
         // GET api/payment/getsession
@@ -23,8 +20,8 @@ namespace PaymentSystem.Controllers
         public ActionResult<string> GetSession(double amount, string purpose = "")
         {
             var session = new Session(amount, purpose);
-            db.AddSession(session);
-            return Ok(session.Session_id);
+            _db.AddSession(session);
+            return Ok(session.SessionId);
         }
 
         // GET api/payment/setpayment
@@ -35,23 +32,23 @@ namespace PaymentSystem.Controllers
                 return BadRequest(info.Error);
 
             //достанем нужную информацию если нужно
-            var session = db.GetSession(info.session_id);
+            var session = _db.GetSession(info.Session_Id);
 
-            if (!CheckLunh(info.number))
+            if (!CheckLunh(info.Number))
                 return BadRequest("Bad card number");
 
             if (session == null)
                 return BadRequest("Bad session id");
 
-            if (!info.cvc.Length.Equals(3) || !int.TryParse(info.cvc, out int _))
+            if (!info.Cvc.Length.Equals(3) || !int.TryParse(info.Cvc, out _))
                 return BadRequest("Bad cvc");
 
-            if (!DateTime.TryParse(info.date, out DateTime _))
+            if (!DateTime.TryParse(info.Date, out _))
                 return BadRequest("Bad date");
 
             //Имитация оплаты
 
-            db.DeleteSession(info.session_id);
+            _db.DeleteSession(info.Session_Id);
 
             return Ok();
         }

@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace PaymentSystem.Models
 {
     public class PaymentInformation
     {
-        public string number, cvc, date, session_id;
+        public string Number, Cvc, Date, Session_Id;
         public string Error { get; private set; }
         public bool AllNotNull()
         {
             var error = new StringBuilder();
-            if (number == null)
-                error.Append("numer is null;");
-            if (cvc == null)
+            if (Number == null)
+                error.Append("number is null;");
+            if (Cvc == null)
                 error.Append("cvc is null;");
-            if (date == null)
+            if (Date == null)
                 error.Append("date is null;");
-            if (session_id == null)
+            if (Session_Id == null)
                 error.Append("session_id is null;");
             if (error.Length != 0)
             {

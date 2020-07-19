@@ -1,36 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using LiteDB;
 
 namespace PaymentSystem.Models
 {
     public class DbHelper
     {
-        // открывает базу данных, если ее нет - то создает
-        LiteDatabase db;
-        ILiteCollection<Session> collection;
+        private readonly ILiteCollection<Session> _collection;
         public DbHelper()
         {
-            db = new LiteDatabase(@"Payments.db");
-            collection = db.GetCollection<Session>("sessions");
-            collection.EnsureIndex(x => x.Session_id);
+            // открывает базу данных, если ее нет - то создает
+            var db = new LiteDatabase(@"Payments.db");
+            _collection = db.GetCollection<Session>("sessions");
+            _collection.EnsureIndex(x => x.SessionId);
         }
 
         public void AddSession(Session session)
         {
-            collection.Insert(session);
+            _collection.Insert(session);
         }
 
-        public Session GetSession(string session_id)
+        public Session GetSession(string sessionId)
         {
-            return collection.Find(session => session.Session_id.Equals(session_id)).FirstOrDefault();
+            return _collection.Find(session => session.SessionId.Equals(sessionId)).FirstOrDefault();
         }
 
-        public void DeleteSession(string session_id)
+        public void DeleteSession(string sessionId)
         {
-            collection.Delete(session_id);
+            _collection.Delete(sessionId);
         }
     }
 }
