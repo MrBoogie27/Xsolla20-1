@@ -10,26 +10,27 @@ namespace PaymentSystem.Models
     {
         // открывает базу данных, если ее нет - то создает
         LiteDatabase db;
-        ILiteCollection<Session> col;
-        DbHelper() {
+        ILiteCollection<Session> collection;
+        public DbHelper()
+        {
             db = new LiteDatabase(@"Payments.db");
-            col = db.GetCollection<Session>("sessions");
-            col.EnsureIndex(x => x.Session_id);
+            collection = db.GetCollection<Session>("sessions");
+            collection.EnsureIndex(x => x.Session_id);
         }
 
         public void AddSession(Session session)
         {
-            col.Insert(session);
+            collection.Insert(session);
         }
 
         public Session GetSession(string session_id)
         {
-            return col.Find(session => session.Session_id.Equals(session_id)).FirstOrDefault();
+            return collection.Find(session => session.Session_id.Equals(session_id)).FirstOrDefault();
         }
 
         public void DeleteSession(string session_id)
         {
-            col.Delete(session_id);
+            collection.Delete(session_id);
         }
     }
 }
